@@ -21,18 +21,17 @@ export class ProductController {
   @Post('/create')
   async createPost(@Res() res, @Body() createProductDTO: CreateProductDTO) {
     const product = await this.productService.createProduct(createProductDTO);
-    return res.status(HttpStatus.OK).json({
-      message: 'Producto insertado',
+    return res.status(HttpStatus.OK).json(
       product,
-    });
+    );
   }
 
   @Get('/')
   async getProducts(@Res() res) {
     const products = await this.productService.getProducts();
-    return res.status(HttpStatus.OK).json({
-      products,
-    });
+    return res.status(HttpStatus.OK).json(
+      products
+    );
   }
 
   @Get('/:id_product')
@@ -41,9 +40,9 @@ export class ProductController {
     if (!product) {
       throw new NotFoundException('No se encontro el producto');
     }
-    return res.status(HttpStatus.OK).json({
+    return res.status(HttpStatus.OK).json(
       product,
-    });
+    );
   }
 
   @Delete('/delete/:id_product')
@@ -52,10 +51,9 @@ export class ProductController {
     if (!product) {
       throw new NotFoundException('No se encontro el producto');
     }
-    return res.status(HttpStatus.OK).json({
-      message: 'Producto eliminado',
+    return res.status(HttpStatus.OK).json(
       product,
-    });
+    );
   }
 
   @Put('/update/:id_product')
@@ -64,9 +62,8 @@ export class ProductController {
     if (!product) {
       throw new NotFoundException('No se encontro el producto');
     }
-    return res.status(HttpStatus.OK).json({
-      message: 'Producto actualizado',
+    return res.status(HttpStatus.OK).json(
       product,
-    });
+    );
   }
 }
