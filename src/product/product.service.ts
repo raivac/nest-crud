@@ -29,7 +29,7 @@ export class ProductService {
     return product;
   }
 
-  async updateProduct(id_product: string, createProductDTO: Promise<Product>) {
+  async updateProduct(id_product: string, createProductDTO: CreateProductDTO) {
     const product = await this.productModel.findByIdAndUpdate(
       id_product,
       createProductDTO,

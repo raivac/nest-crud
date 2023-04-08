@@ -7,6 +7,8 @@ import {
   Res,
   HttpStatus,
   Body,
+  Param,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateProductDTO } from './dto/product.dto';
 import { ProductService } from './product.service';
@@ -20,7 +22,8 @@ export class ProductController {
   async createPost(@Res() res, @Body() createProductDTO: CreateProductDTO) {
     const product = await this.productService.createProduct(createProductDTO);
     return res.status(HttpStatus.OK).json({
-      product
+      message: 'Producto insertado',
+      product,
     });
   }
 
@@ -28,15 +31,42 @@ export class ProductController {
   async getProducts(@Res() res) {
     const products = await this.productService.getProducts();
     return res.status(HttpStatus.OK).json({
-      products
+      products,
     });
-
   }
-  // @Get('/:id_product')
-  // async getProduct(@Res() res) {
-  //   const product = await this.productService.getProduct();
-  //   return res.status(HttpStatus.OK).json({
-  //     product
-  //   });
-  // }
+
+  @Get('/:id_product')
+  async getProduct(@Res() res, @Param('id_product') id_product) {
+    const product = await this.productService.getProduct(id_product);
+    if (!product) {
+      throw new NotFoundException('No se encontro el producto');
+    }
+    return res.status(HttpStatus.OK).json({
+      product,
+    });
+  }
+
+  @Delete('/delete/:id_product')
+  async deleteProduct(@Res() res, @Param('id_product') id_product) {
+    const product = await this.productService.deleteProduct(id_product);
+    if (!product) {
+      throw new NotFoundException('No se encontro el producto');
+    }
+    return res.status(HttpStatus.OK).json({
+      message: 'Producto eliminado',
+      product,
+    });
+  }
+
+  @Put('/update/:id_product')
+  async updateProduct(@Res() res, @Body() createProductDTO: CreateProductDTO , @Param('id_product') id_product){
+    const product = await this.productService.updateProduct(id_product,createProductDTO)
+    if (!product) {
+      throw new NotFoundException('No se encontro el producto');
+    }
+    return res.status(HttpStatus.OK).json({
+      message: 'Producto actualizado',
+      product,
+    });
+  }
 }
